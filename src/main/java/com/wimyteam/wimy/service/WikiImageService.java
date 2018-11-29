@@ -28,6 +28,10 @@ public class WikiImageService {
       "https://en.wikipedia.org/w/api.php?action=query&prop=pageimages" +
           "&titles={titles}&indexpageids&pithumbsize=" + IMAGE_SIZE + "&format=json";
 
+  private static final String URL_PAGEID =
+      "https://en.wikipedia.org/w/api.php?action=query&prop=pageimages" +
+          "&pageids={pageids}&pithumbsize=" + IMAGE_SIZE + "&format=json";
+
   private final RestTemplate template;
 
   public WikiImageService() {
@@ -48,5 +52,18 @@ public class WikiImageService {
     JsonNode pageIds = root.path("query").path("pageids");
 
     return pages.get(pageIds.get(0).textValue()).path("thumbnail").path("source").textValue();
+  }
+
+  public ResponseEntity<String> getPageImageById(int pageId) {
+    return template.getForEntity(URL_PAGEID, String.class, pageId);
+  }
+
+  public String getPageImageUrlById(int pageId) throws IOException {
+    ResponseEntity<String> response = getPageImageById(pageId);
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode root = mapper.readTree(response.getBody());
+    JsonNode pages = root.path("query").path("pages");
+
+    return pages.get(String.valueOf(pageId)).path("thumbnail").path("source").textValue();
   }
 }
