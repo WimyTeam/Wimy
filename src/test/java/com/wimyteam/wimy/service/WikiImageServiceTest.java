@@ -16,7 +16,7 @@ public class WikiImageServiceTest {
 
   @Test
   public void returnsImage() {
-    ResponseEntity<String> response = wikiImageService.getPageImage("Albert Einstein");
+    ResponseEntity<String> response = wikiImageService.getPageImageByTitle("Albert Einstein");
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertNotSame("", response.getBody());
     log.info("Response body:\n" + response.getBody());
@@ -24,7 +24,7 @@ public class WikiImageServiceTest {
 
   @Test
   public void returnsImageUrl() throws IOException {
-    String url = wikiImageService.getPageImageUrl("Albert Einstein");
+    String url = wikiImageService.getPageImageUrlByTitle("Albert Einstein");
     log.info(url);
     assertNotSame("", url);
     assertNotNull(url);

@@ -20,13 +20,13 @@ public class WikiImageService {
     return INSTANCE;
   }
 
-  Logger logger = LoggerFactory.getLogger(WikiImageService.class);
+  private Logger log = LoggerFactory.getLogger(WikiImageService.class);
 
-  private static final int imageSize = 600;
+  private static final int IMAGE_SIZE = 600;
 
-  private static final String url =
+  private static final String URL_TITLE =
       "https://en.wikipedia.org/w/api.php?action=query&prop=pageimages" +
-          "&titles={titles}&indexpageids&pithumbsize=" + imageSize + "&format=json";
+          "&titles={titles}&indexpageids&pithumbsize=" + IMAGE_SIZE + "&format=json";
 
   private final RestTemplate template;
 
@@ -34,15 +34,14 @@ public class WikiImageService {
     this.template = new RestTemplate();
   }
 
-  public ResponseEntity<String> getPageImage(String pageTitle) {
+  public ResponseEntity<String> getPageImageByTitle(String pageTitle) {
     String pageTitleEncoded = URLEncoder.encode(pageTitle, StandardCharsets.UTF_8);
-    logger.info("pageTitleEncoded: " + pageTitleEncoded);
-
-    return template.getForEntity(url, String.class, pageTitleEncoded);
+    log.info("pageTitleEncoded: " + pageTitleEncoded);
+    return template.getForEntity(URL_TITLE, String.class, pageTitleEncoded);
   }
 
-  public String getPageImageUrl(String pageTitle) throws IOException {
-    ResponseEntity<String> response = getPageImage(pageTitle);
+  public String getPageImageUrlByTitle(String pageTitle) throws IOException {
+    ResponseEntity<String> response = getPageImageByTitle(pageTitle);
     ObjectMapper mapper = new ObjectMapper();
     JsonNode root = mapper.readTree(response.getBody());
     JsonNode pages = root.path("query").path("pages");
