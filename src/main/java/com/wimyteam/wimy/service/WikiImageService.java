@@ -14,11 +14,6 @@ import java.nio.charset.StandardCharsets;
 
 @Service
 public class WikiImageService {
-  // Singleton pattern
-  private static final WikiImageService INSTANCE = new WikiImageService();
-  public static WikiImageService getInstance() {
-    return INSTANCE;
-  }
 
   private Logger log = LoggerFactory.getLogger(WikiImageService.class);
 
